@@ -9,6 +9,7 @@ import { firebaseConfig } from './firebase/config';
 import Login from './Screens/Login';
 import Signup from './Screens/Signup';
 import Home from './Screens/Home';
+import ItemForm from './Screens/ItemForm';
 
 const Stack = createStackNavigator()
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="ItemForm" component={ItemForm} />
       </Stack.Navigator>
     </NavigationContainer>
   );
