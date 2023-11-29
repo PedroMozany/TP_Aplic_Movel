@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, Text, Alert} from 'react-native';
 import Button from '../Componete/Button'
 import { firebase } from '../firebase/config';
 import { useNavigation } from '@react-navigation/native';
@@ -9,14 +9,19 @@ const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const navigation = useNavigation();
 
-const handleSignup = async () => {
-    try {
+  const handleSignup = async () => {
+    if (password.length < 6) {
+      Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+   try {
       await firebase.auth().createUserWithEmailAndPassword(email, password);
       navigation.navigate('Login');
     } catch (error) {
       console.error('Erro ao criar conta:', error.message);
     }
   };
+  
 
   return (
   <View style={styles.view}>
@@ -29,16 +34,12 @@ const handleSignup = async () => {
         value={email}
         placeholder="Email address"
       />
-      <TextInput
+     <TextInput
         style={styles.input}
         onChangeText={(text) => setPassword(text)}
         value={password}
         placeholder="Create password"
         secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirn password"
       />
     <Button title="NEXT" onPress={handleSignup} />
     </View>
