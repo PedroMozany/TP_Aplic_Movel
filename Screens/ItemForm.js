@@ -1,24 +1,34 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import { firebase} from '../firebase/config';
+import { useNavigation } from '@react-navigation/native';
 
-export default function ItemForm() {
-  const [descricao, setDescricao] = useState('');
+export default function ItemForm({ route }) {
+  const [name, setName] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [tipoQuantidade, setTipoQuantidade] = useState('unidade');
   const [observacao, setObservacao] = useState('');
+  const itensFirebase = firebase.firestore().collection('itens');
+  const [editItem, setEditItem] = useState(null); 
+  const navigation = useNavigation();
 
-  function handleDescriptionChange(descricao) {
-    setDescricao(descricao);
+  useEffect(() => {
+    // Caso edição, irá verificar pela route que for repassado
+    if (route.params && route.params.item) {
+      const itemToEdit = route.params.item;
+      setName(itemToEdit.name);
+      setQuantidade(itemToEdit.quantidade);
+      setTipoQuantidade(itemToEdit.tipoQuantidade);
+      setObservacao(itemToEdit.observacao);
+      setEditItem(itemToEdit);
+    }
+  }, [route.params]);
+
+  function handleNameChange(name) {
+    setName(name);
   }
 
   function handleQuantityChange(value) {
@@ -30,24 +40,71 @@ export default function ItemForm() {
   }
 
   function handleObservacaoChange(observacao) {
-    setObservacao(observacao);
+    setObservacao(observacao); 
+  }
+
+  async function handleAddItem(data) {
+    try {
+      await itensFirebase
+        .add(data)
+        .then(() => {
+          Alert.alert('Sucesso', 'Item salvo com sucesso!');
+          navigation.navigate('Home');
+        })
+    } catch (error) {
+      Alert.alert('Erro', 'Houve um problema ao salvar o item:' + error);
+    }
+  }
+
+  async function handleUpdateItem(data) {
+    try {
+      await itensFirebase
+        .doc(editItem.id)
+        .update(data)
+        .then(() => {
+          Alert.alert('Sucesso', 'Item atualizado com sucesso!');
+          navigation.navigate('Home');
+        })
+    } catch (error) {
+      Alert.alert('Erro', 'Houve um problema ao atualizar o item:' + error);
+    }
   }
 
   async function handleButtonPress() {
-    /* SALVAR NO FIREBASE + ADICIONAR VALIDACOES */
-  }
+    if (!name.trim() || !quantidade.trim()) {
+      Alert.alert('Erro', 'Preencha todos os campos.');
+      return;
+    }
 
+    const usuarioId = firebase.auth().currentUser.uid;
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+    const data = {
+      name,
+      quantidade,
+      tipoQuantidade,
+      observacao,
+      usuarioId,
+      createdAt: timestamp,
+    };
+    
+    if (editItem) {
+      await handleUpdateItem(data);
+    } else {
+      await handleAddItem(data);
+    }
+  }
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Adicione Itens à Lista</Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>DESCRIÇÃO:</Text>
+        <Text style={styles.label}>Nome do Item:</Text>
         <TextInput
           style={styles.input}
-          onChangeText={handleDescriptionChange}
+          onChangeText={handleNameChange}
           placeholder="Digite o Item"
           clearButtonMode="always"
-          value={descricao}
+          value={name}
         />
         <Text style={styles.label}>QUANTIDADE:</Text>
         <TextInput
@@ -59,22 +116,23 @@ export default function ItemForm() {
           value={quantidade.toString()}
         />
         <Text style={styles.label}>TIPO DE QUANTIDADE:</Text>
-        <Picker
-          style={styles.input}
-          selectedValue={tipoQuantidade}
-          onValueChange={handleTipoQuantidadeChange}
-        >
-          <Picker.Item label="Unidade" value="unidade" />
-          <Picker.Item label="Litro" value="litro" />
-          <Picker.Item label="Quilograma" value="kg" />
-          <Picker.Item label="Grama" value="g" />
-          <Picker.Item label="Pacote" value="pacote" />
-          <Picker.Item label="Caixa" value="caixa" />
-        </Picker>
+          <Picker
+            style={styles.input}
+            selectedValue={tipoQuantidade}
+            onValueChange={handleTipoQuantidadeChange}
+          >
+            <Picker.Item label="Unidade" value="unidade" />
+            <Picker.Item label="Litro" value="litro" />
+            <Picker.Item label="Quilograma" value="kg" />
+            <Picker.Item label="Grama" value="g" />
+            <Picker.Item label="Pacote" value="pacote" />
+            <Picker.Item label="Caixa" value="caixa" />
+          </Picker>
         <Text style={styles.label}>OBSERVAÇÃO (OPCIONAL):</Text>
         <TextInput
           style={[styles.input, styles.observationInput]}
           onChangeText={handleObservacaoChange}
+          placeholder="Digite a Observação"
           clearButtonMode="always"
           value={observacao}
           multiline={true}

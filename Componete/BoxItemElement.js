@@ -1,23 +1,19 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // Importe os ícones necessários
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { firebase} from '../firebase/config';
 
-const BoxItemElement = ({ item }) => {
-  const handleEdit = () => {
-    // fazer lo´gica editar
-  };
-
-  const handleDelete = () => {
-     // fazer lo´gica editar
-  };
+const BoxItemElement = ({ item, handleEdit, handleDelete}) => {
+  const navigation = useNavigation();
 
   return (
     <View style={styles.box}>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleEdit}>
+        <TouchableOpacity style={styles.button} onPress={() => handleEdit(item)}>
           <MaterialIcons name="edit" size={20} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleDelete}>
+        <TouchableOpacity style={styles.button} onPress={() => handleDelete(item)}>
           <MaterialIcons name="delete" size={20} color="black" />
         </TouchableOpacity>
       </View>
@@ -27,7 +23,6 @@ const BoxItemElement = ({ item }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   box: {
     width: '45%',
