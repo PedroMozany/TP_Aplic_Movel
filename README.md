@@ -1,11 +1,54 @@
-# Sample Snack app
+# Aplicação Móvel - Lista de Compras
 
-Open the `App.js` file to start writing some code. You can preview the changes directly on your phone or tablet by scanning the **QR code** or use the iOS or Android emulators. When you're done, click **Save** and share the link!
+## Descrição do Projeto
 
-When you're ready to see everything that Expo provides (or if you want to use your own editor) you can **Download** your project and use it with [expo cli](https://docs.expo.dev/get-started/installation/#expo-cli)).
+Este projeto de aplicativo móvel foi desenvolvido como parte de um trabalho acadêmico na disciplina de Aplicações Móveis. O aplicativo é uma Lista de Compras, permitindo aos usuários gerenciar e organizar os itens que desejam comprar.
 
-All projects created in Snack are publicly available, so you can easily share the link to this project via link, or embed it on a web page with the `<>` button.
+## Autores
 
-If you're having problems, you can tweet to us [@expo](https://twitter.com/expo) or ask in our [forums](https://forums.expo.dev/c/expo-dev-tools/61) or [Discord](https://chat.expo.dev/).
+- **[Eduardo Atene Silva]**
+  - Papel: Desenvolvedor
+    
+- **[Erik Douglas Alves Gomes]**
+  - Papel: Redator Técnico 
+    
+- **[Pedro Henrique Mozany de Almeida]**
+  - Papel: Desenvolvedor
+    
+- **[Renato Vianna do Valle Junior]**
+  - Papel: Redator Técnico 
 
-Snack is Open Source. You can find the code on the [GitHub repo](https://github.com/expo/snack).
+## Tecnologias Utilizadas
+
+- **React Native:** O aplicativo foi desenvolvido utilizando o framework React Native, permitindo a criação de uma aplicação móvel multiplataforma.
+
+- **Firebase:** Foi utilizado o Firebase para autenticação de usuários e armazenamento de dados na nuvem. Isso permite que os usuários acessem suas listas de compras de qualquer dispositivo.
+
+- **Expo:** O projeto foi iniciado com o Expo, facilitando o desenvolvimento e o teste do aplicativo.
+
+## Funcionalidades
+
+1. **Autenticação de Usuário:** Os usuários podem criar contas e fazer login para acessar suas listas de compras personalizadas.
+
+2. **Adição de Itens:** Os usuários podem adicionar itens à lista de compras, fornecendo informações como nome e quantidade.
+
+3. **Edição e Exclusão de Itens:** Os usuários têm a capacidade de editar e excluir itens da lista de compras.
+
+4. **Pesquisa de Itens:** Implementação de uma funcionalidade de pesquisa que permite aos usuários encontrar rapidamente itens em suas listas de compras.
+
+## Como Executar o Projeto
+
+1. Clone o repositório: `git clone [URL do Repositório]`
+2. Instale as dependências: `npm install`
+3. Configure as credenciais do Firebase no arquivo `config.js`.
+4. Execute o aplicativo: `npm start` ou `expo start`
+
+Certifique-se de ter o Node.js, npm e o Expo CLI instalados em seu ambiente de desenvolvimento.
+
+## Contribuições
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests para melhorar o projeto.
+
+## Link expo.dev
+
+[Expo.dev](https://snack.expo.dev/@pedromozany/tp_aplic_movel?platform=android)
